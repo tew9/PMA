@@ -121,7 +121,7 @@ namespace Accelerator.API.Shared.Services
             {
                 return new QuestionPostResponse()
                 {
-                    Error = new Error() { Message = $"Incomplete Request, Please provide a correct QID", Type = "DeleteQuestion" },
+                    Error = new Error() { Message = $"Bad Request, Please provide a correct QID", Type = "DeleteQuestion" },
                     Status = "Failed",
                 };
             }
@@ -135,7 +135,7 @@ namespace Accelerator.API.Shared.Services
 
                 Info info = new Info()
                 {
-                    Message = "Question is Deleted Successfuly",
+                    Message = $"Question with ID {qId} is Deleted Successfuly",
                     Source = "DeleteQuestion"
                 };
                 return new QuestionPostResponse()
@@ -150,7 +150,7 @@ namespace Accelerator.API.Shared.Services
 
                 return new QuestionPostResponse()
                 {
-                    Error = new Error() { Message = $"Failed to delete a question, {e.Message}", Type = "DeleteQuestion" },
+                    Error = new Error() { Message = $"Failed to delete a question {qId}, {e.Message}", Type = "DeleteQuestion" },
                     Status = "Failed",
                 };
             }
