@@ -17,24 +17,23 @@ using Newtonsoft.Json;
 
 namespace Accelerator.API
 {
-    public class GetQuestionsFunc
+    public class GetQuestionByIDFunc
     {
         #region constants
         private IQuestionService _questionService;
         #endregion
-        public GetQuestionsFunc(IQuestionService questionService)
+        public GetQuestionByIDFunc(IQuestionService questionService)
         {
             _questionService = questionService;
         }
 
-
-        [FunctionName("GetAllQuestions")]
-        [OpenApiOperation(operationId: "Run", tags: new[] { "GetAllQuestions" })]
+        [FunctionName("GetQuestionByID")]
+        [OpenApiOperation(operationId: "Run", tags: new[] { "GetQuestionByID" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         //[OpenApiParameter(name: "name", In = ParameterLocation.Path, Required = false, Type = typeof(string), Description = "The **Name** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(QuestionGetResponse), Description = "The OK response")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "questions")] HttpRequest req,
+        public async Task<IActionResult> RunGetQuestions(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "question/{QId}")] HttpRequest req, string QId,
             ILogger log)
         {
             log.LogInformation("GetAllQuestion function is triggered...");
