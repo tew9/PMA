@@ -12,12 +12,13 @@ namespace Accelerator.API.Shared.Services
 {
     public class QuestionService : IQuestionService
     {
+        #region constants
         IMapper<QuestionsDTO, Questions> _questionMapper;
         private IQuestionRepository _questionRepository;
         private IClientSessionHandle _clientSessionHandle;
 
         static List<QuestionsDTO> questions = new List<QuestionsDTO>();
-
+        #endregion
         public QuestionService(IMapper<QuestionsDTO, Questions> questionMapper,
             IQuestionRepository questionRepository, IClientSessionHandle clientSessionHandle) =>
         (_questionMapper, _questionRepository, _clientSessionHandle) = (questionMapper, questionRepository, clientSessionHandle);
@@ -171,17 +172,28 @@ namespace Accelerator.API.Shared.Services
             try
             {
                 var question = await _questionRepository.GetQuestionsByIdAsync(QID);
-
                 var q = new List<Questions>();
-                q.Add(_questionMapper.Map(question));
-          
-                return new QuestionGetResponse()
+                if (question != null)
                 {
-                    Status = "success",
-                    Count = q.Count,
-                    Values = q,
-                    Info = new Info() { Message = " Retrieved the question successfuly", Source = "GetQuestionByID" }
-                };
+                    q.Add(_questionMapper.Map(question));
+
+                    return new QuestionGetResponse()
+                    {
+                        Status = "success",
+                        Count = q.Count,
+                        Values = q,
+                        Info = new Info() { Message = " Retrieved the question successfuly", Source = "GetQuestionByID" }
+                    };
+                }
+                else
+                {
+                    return new QuestionGetResponse()
+                    {
+                        Status = "success",
+                        Info = new Info() { Message = $"There's no question with ID {QID}", Source = "GetQuestionByID" }
+                    };
+                }
+               
             }
             catch (Exception e)
             {
@@ -203,18 +215,31 @@ namespace Accelerator.API.Shared.Services
                 var questions = await _questionRepository.GetQuestionsByCategoryIDAsync(CatID);
 
                 var quests = new List<Questions>();
-                foreach (var q in questions)
+                if (questions != null)
                 {
-                    quests.Add(_questionMapper.Map(q));
+                    foreach (var q in questions)
+                    {
+                        quests.Add(_questionMapper.Map(q));
+                    }
+
+                    return new QuestionGetResponse()
+                    {
+                        Status = "success",
+                        Count = quests.Count,
+                        Values = quests,
+                        Info = new Info() { Message = " Retrieved the questions successfuly", Source = "GetQuestionByCategoryID" }
+                    };
+                }
+                else
+                {
+                    return new QuestionGetResponse()
+                    {
+                        Status = "success",
+                        Info = new Info() { Message = "There's no Question in this category", Source = "GetQuestionByCategoryID" }
+                    };
                 }
 
-                return new QuestionGetResponse()
-                {
-                    Status = "success",
-                    Count = quests.Count,
-                    Values = quests,
-                    Info = new Info() { Message = " Retrieved the questions successfuly", Source = "GetQuestionByCategoryID" }
-                };
+               
             }
             catch (Exception e)
             {
@@ -234,18 +259,32 @@ namespace Accelerator.API.Shared.Services
             {
                 var questions = await _questionRepository.GetAllQuestionsAsync();
                 var quests = new List<Questions>();
-                foreach (var q in questions)
+
+                if (questions != null)
                 {
-                    quests.Add(_questionMapper.Map(q));
+                    foreach (var q in questions)
+                    {
+                        quests.Add(_questionMapper.Map(q));
+                    }
+
+                    return new QuestionGetResponse()
+                    {
+                        Status = "success",
+                        Count = quests.Count,
+                        Values = quests,
+                        Info = new Info() { Message = "got all the questions successfuly", Source = "GetQuestions" }
+                    };
+                }
+                else
+                {
+                    return new QuestionGetResponse()
+                    {
+                        Status = "success",
+                        Info = new Info() { Message = "There's are no Questions added yet", Source = "GetQuestions" }
+                    };
                 }
 
-                return new QuestionGetResponse()
-                {
-                    Status = "success",
-                    Count = quests.Count,
-                    Values = quests,
-                    Info = new Info() { Message = "got all the questions successfuly", Source = "GetQuestions" }
-                };
+                
             }
             catch (Exception e)
             {

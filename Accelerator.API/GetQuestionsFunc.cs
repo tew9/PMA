@@ -17,43 +17,36 @@ using Newtonsoft.Json;
 
 namespace Accelerator.API
 {
-    public class GetQuestionByIDFunc
+    public class GetQuestionsFunc
     {
         #region constants
         private IQuestionService _questionService;
         #endregion
-        public GetQuestionByIDFunc(IQuestionService questionService)
+        public GetQuestionsFunc(IQuestionService questionService)
         {
             _questionService = questionService;
         }
 
-        [FunctionName("GetQuestionByID")]
-        [OpenApiOperation(operationId: "Run", tags: new[] { "GetQuestionByID" })]
+        [FunctionName("GetQuestions")]
+        [OpenApiOperation(operationId: "Run", tags: new[] { "GetQuestions" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiParameter(name: "QId", In = ParameterLocation.Path, Required = false, Type = typeof(string), Description = "The **QID** parameter")]
+        //[OpenApiParameter(name: "name", In = ParameterLocation.Path, Required = false, Type = typeof(string), Description = "The **Name** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(QuestionGetResponse), Description = "The OK response")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "questions/{QId}")] HttpRequest req, string QId,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "questions")] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("GetQuestionByID function is triggered...");
-
-            if(string.IsNullOrEmpty(QId))
-            {
-                log.LogError($"Please provide QId parameter...");
-                return new BadRequestResult();
-            }
+            log.LogInformation("GetAllQuestion function is triggered...");
 
             log.LogInformation("Calling Questions service...");
-
-            var response = await _questionService.GetQuestionById(QId.ToUpper());
+            var response = await _questionService.GetQuestions();
 
             if(response.Error != null)
             {
                 log.LogError($"Getting question returned error {response.Error.Message}...");
                 return new BadRequestObjectResult(response);
             }
-            log.LogInformation("Quesions is retrieved succesfully...");
+            log.LogInformation("All Quesions are retrieved succesfully...");
             return new OkObjectResult(response);
         }
     }
