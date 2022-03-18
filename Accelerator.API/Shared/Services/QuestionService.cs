@@ -26,11 +26,11 @@ namespace Accelerator.API.Shared.Services
         public async Task<QuestionPostResponse> AddQuestion(Questions question)
         {
 
-            if(string.IsNullOrEmpty(question.QID))
+            if(string.IsNullOrEmpty(question.QID) || question.QID.Length != 3)
             {
                 return new QuestionPostResponse()
                 {
-                    Error = new Error() { Message = $"Incomplete Request, Please provide a good question payload", Type = "AddQuestion" },
+                    Error = new Error() { Message = $"Incomplete Request, Please provide the correct question payload", Type = "AddQuestion" },
                     Status = "Failed",
                 };
             }

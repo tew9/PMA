@@ -22,10 +22,8 @@ namespace Accelerator.API.Shared.Models
         public string Category { get; set; }
         [JsonProperty("subCategory")]
         public string SubCategory { get; set; }
-        [JsonProperty("boolType")]
-        public bool BoolQuestionType { get; set; }
-        [JsonProperty("listType")]
-        public IEnumerable<string> ListQuestionType { get; set; }
+        [JsonProperty("answerType")]
+        public AnswerDisplayType AnswerType { get; set; }
         [JsonProperty("totalPoints")]
         public int TotalPoint { get; set; }
     }

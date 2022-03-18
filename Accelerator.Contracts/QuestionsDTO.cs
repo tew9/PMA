@@ -21,10 +21,8 @@ namespace Accelerator.Contracts
         public string SubCategory { get; set; }
         [BsonElement("DisplayType")]
         public QuestionDisplayTypes DisplayType { get; set; }
-        [BsonElement("BoolQuestionType")]
-        public bool BoolQuestionType { get; set; }
-        [BsonElement("ListQuestionType")]
-        public IEnumerable<string> ListQuestionType { get; set; }
+        [BsonElement("AnswerType")]
+        public AnswerDisplayType AnswerType { get; set; }
         [BsonElement("TotalScore")]
         public int TotalScore { get; set; }
         [BsonElement("TotalPoint")]
@@ -37,6 +35,12 @@ namespace Accelerator.Contracts
     //    public int Weight { get; set; }
     //    public T Answer { get; set; }
     //}
+
+    public class AnswerDisplayType
+    {
+        public bool BoolType { get; set; }
+        public IEnumerable<string> ListType { get; set; }
+    }
 
     public enum QuestionDisplayTypes
     {

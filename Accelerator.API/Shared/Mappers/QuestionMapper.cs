@@ -19,8 +19,7 @@ namespace Accelerator.API.Shared.Mappers
                 ShortDescription = from.ShortDescription,
                 Category = from.Category,
                 SubCategory = from.SubCategory,
-                BoolQuestionType = from.BoolQuestionType,
-                ListQuestionType = from.ListQuestionType,
+                AnswerType = from.AnswerType,
                 TotalPoint = from.TotalPoint
             };
         }
@@ -36,8 +35,7 @@ namespace Accelerator.API.Shared.Mappers
                 ShortDescription = from.ShortDescription,
                 Category = from.Category,
                 SubCategory = from.SubCategory,
-                BoolQuestionType = from.BoolQuestionType,
-                ListQuestionType = from.ListQuestionType,
+                AnswerType = from.AnswerType,
                 TotalPoint = from.TotalPoint
             };
         }
