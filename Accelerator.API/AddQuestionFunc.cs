@@ -34,7 +34,7 @@ namespace Accelerator.API
         //[OpenApiParameter(name: "name", In = ParameterLocation.Path, Required = false, Type = typeof(string), Description = "The **Name** parameter")]
         [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(Questions), Description = "The **Question properties** parameters")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(QuestionPostResponse), Description = "The OK response")]
-        public async Task<IActionResult> Run(
+        public async Task<IActionResult> RunAddQuestion(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "questions")] HttpRequest req,
             ILogger log)
         {
@@ -42,9 +42,14 @@ namespace Accelerator.API
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var question = JsonConvert.DeserializeObject<Questions>(requestBody);
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
 
             log.LogInformation("Calling AddQuestion service...");
+            if(question == null)
+            {
+                log.LogError($"Please provide all the required questionaire fields...");
+                return new BadRequestResult();
+            }
+
             var response = await _questionService.AddQuestion(question);
 
             if(response.Error != null)
