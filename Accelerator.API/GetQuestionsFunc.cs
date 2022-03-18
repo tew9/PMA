@@ -33,7 +33,7 @@ namespace Accelerator.API
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         //[OpenApiParameter(name: "name", In = ParameterLocation.Path, Required = false, Type = typeof(string), Description = "The **Name** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(QuestionGetResponse), Description = "The OK response")]
-        public async Task<IActionResult> Run(
+        public async Task<IActionResult> RunGetQuestions(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "questions")] HttpRequest req,
             ILogger log)
         {

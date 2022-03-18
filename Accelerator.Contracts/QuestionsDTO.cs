@@ -1,22 +1,33 @@
-﻿using System;
+﻿using Accelerator.Contracts.Base;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Accelerator.Contracts
 {
-    public class QuestionsDTO
+    public class QuestionsDTO : BaseEntityDTO
     {
-        public string QID { get; set; }
         public int LogicID { get; set; } // may not need this, would route to backend logic but could be routed using Category
+        [BsonElement("CategoryID")]
         public CategoryID CategoryID { get; set; }
+        [BsonElement("Description")]
         public string Description { get; set; }
+        [BsonElement("ShortDescription")]
         public string ShortDescription { get; set; }
+        [BsonElement("Category")]
         public string Category { get; set; }
+        [BsonElement("SubCategory")]
         public string SubCategory { get; set; }
+        [BsonElement("DisplayType")]
         public QuestionDisplayTypes DisplayType { get; set; }
+        [BsonElement("BoolQuestionType")]
         public bool BoolQuestionType { get; set; }
+        [BsonElement("ListQuestionType")]
         public IEnumerable<string> ListQuestionType { get; set; }
+        [BsonElement("TotalScore")]
         public int TotalScore { get; set; }
+        [BsonElement("TotalPoint")]
         public int TotalPoint { get; set; }
     }
 
