@@ -17,48 +17,47 @@ using Newtonsoft.Json;
 
 namespace Accelerator.API
 {
-    public class AddQuestionFunc
+    public class UpdateQuestionFunc
     {
         #region constants
         private IQuestionService _questionService;
         #endregion
-        public AddQuestionFunc(IQuestionService questionService)
+        public UpdateQuestionFunc(IQuestionService questionService)
         {
             _questionService = questionService;
         }
 
 
-        [FunctionName("AddQuestion")]
-        [OpenApiOperation(operationId: "Run", tags: new[] { "AddQuestion" })]
-        //[OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        //[OpenApiParameter(name: "name", In = ParameterLocation.Path, Required = false, Type = typeof(string), Description = "The **Name** parameter")]
+        [FunctionName("UpdateQuestionFunc")]
+        [OpenApiOperation(operationId: "Run", tags: new[] { "UpdateQuestionFunc" })]
         [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(Questions), Description = "The **Question properties** parameters, **questionDisplayType** is number type, use below Mapping DropDown = 0, " +
             "CheckBoxes = 1, TrueFalse = 2")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(QuestionPostResponse), Description = "The OK response")]
         public async Task<IActionResult> RunAddQuestion(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "questions")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "questions")] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("Question Post is triggered...");
+            log.LogInformation("UpdateQuestion func is triggered...");
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var question = JsonConvert.DeserializeObject<Questions>(requestBody);
 
             log.LogInformation("Calling AddQuestion service...");
-            if(question == null)
+            if(question.QID.Length != 3)
             {
                 log.LogError($"Please provide all the required questionaire fields...");
                 return new BadRequestResult();
             }
 
-            var response = await _questionService.AddQuestion(question);
+            var response = await _questionService.UpdateQuestion(question.QID, question);
 
             if(response.Error != null)
             {
-                log.LogError($"Adding question returned error {response.Error.Message}...");
+                log.LogError($"Updating question returned error {response.Error.Message}...");
                 return new BadRequestObjectResult(response);
             }
-            log.LogInformation("Quesion is added succesfully...");
+            log.LogInformation("Quesion is Updated succesfully...");
+            log.LogInformation("Quesion is Updated succesfully...");
             return new OkObjectResult(response);
         }
     }

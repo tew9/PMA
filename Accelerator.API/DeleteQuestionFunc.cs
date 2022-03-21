@@ -17,26 +17,26 @@ using Newtonsoft.Json;
 
 namespace Accelerator.API
 {
-    public class GetQuestionByIDFunc
+    public class DeleteQuestionFunc
     {
         #region constants
         private IQuestionService _questionService;
         #endregion
-        public GetQuestionByIDFunc(IQuestionService questionService)
+        public DeleteQuestionFunc(IQuestionService questionService)
         {
             _questionService = questionService;
         }
 
-        [FunctionName("GetQuestionByID")]
-        [OpenApiOperation(operationId: "Run", tags: new[] { "GetQuestionByID" })]
+        [FunctionName("DeleteQuestion")]
+        [OpenApiOperation(operationId: "Run", tags: new[] { "DeleteQuestion" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiParameter(name: "QId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **QID** parameter")]
+        [OpenApiParameter(name: "QId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **QID** parameter, Three letters Question ID")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(QuestionGetResponse), Description = "The OK response")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "questions/{QId}")] HttpRequest req, string QId,
+            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "questions/{QId}")] HttpRequest req, string QId,
             ILogger log)
         {
-            log.LogInformation("GetQuestionByID function is triggered...");
+            log.LogInformation("DeleteQuestion function is triggered...");
 
             if(string.IsNullOrEmpty(QId))
             {
@@ -46,14 +46,14 @@ namespace Accelerator.API
 
             log.LogInformation("Calling Questions service...");
 
-            var response = await _questionService.GetQuestionById(QId.ToUpper());
+            var response = await _questionService.DeleteQuestion(QId.ToUpper());
 
             if(response.Error != null)
             {
-                log.LogError($"Getting question returned error {response.Error.Message}...");
+                log.LogError($"Error happened while deleting question {response.Error.Message}...");
                 return new BadRequestObjectResult(response);
             }
-            log.LogInformation("Quesions is retrieved succesfully...");
+            log.LogInformation("Quesions is Deleted succesfully...");
             return new OkObjectResult(response);
         }
     }

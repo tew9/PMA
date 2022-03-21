@@ -17,36 +17,40 @@ using Newtonsoft.Json;
 
 namespace Accelerator.API
 {
-    public class GetQuestionByIDFunc
+    public class GetQuestionByCategoryIDFunc
     {
         #region constants
         private IQuestionService _questionService;
         #endregion
-        public GetQuestionByIDFunc(IQuestionService questionService)
+        public GetQuestionByCategoryIDFunc(IQuestionService questionService)
         {
             _questionService = questionService;
         }
 
-        [FunctionName("GetQuestionByID")]
-        [OpenApiOperation(operationId: "Run", tags: new[] { "GetQuestionByID" })]
+        [FunctionName("GetQuestionByCategoryID")]
+        [OpenApiOperation(operationId: "Run", tags: new[] { "GetQuestionByCategoryID" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiParameter(name: "QId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **QID** parameter")]
+        [OpenApiParameter(name: "categoryID", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **categoryID** parameter, Insert **categoryID** as number, use below Mapping" +
+            "ApplicationSpec = 1, "+
+            "DevelopmentMethodology = 2, HostingEnvironment = 3, SourceControl = 4, BranchingStrategy = 5, "+
+            "ContinousIntegration = 6, Testing = 7, Containerization = 8, Database = 9, ContinousDelivery = 10, "+
+            "Security = 11, Monitoring = 12, Logging = 13, TeamCollaboration = 14, ")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(QuestionGetResponse), Description = "The OK response")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "questions/{QId}")] HttpRequest req, string QId,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "questions/{categoryID}")] HttpRequest req, string categoryID,
             ILogger log)
         {
             log.LogInformation("GetQuestionByID function is triggered...");
 
-            if(string.IsNullOrEmpty(QId))
+            if(string.IsNullOrEmpty(categoryID))
             {
-                log.LogError($"Please provide QId parameter...");
+                log.LogError($"Please provide categoryID parameter...");
                 return new BadRequestResult();
             }
 
             log.LogInformation("Calling Questions service...");
 
-            var response = await _questionService.GetQuestionById(QId.ToUpper());
+            var response = await _questionService.GetQuestionsByCategoryID(Int32.Parse(categoryID));
 
             if(response.Error != null)
             {
