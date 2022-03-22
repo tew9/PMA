@@ -2,10 +2,12 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Accelerator.Contracts
 {
+    [DataContract]
     public class QuestionsDTO : BaseEntityDTO
     {
         public int LogicID { get; set; } // may not need this, would route to backend logic but could be routed using Category
@@ -27,6 +29,14 @@ namespace Accelerator.Contracts
         public int TotalScore { get; set; }
         [BsonElement("TotalPoint")]
         public int TotalPoint { get; set; }
+        [BsonElement("CreatedBy")]
+        public UserDTO CreatedBy { get; set; }
+        [BsonElement("ModifiedBy")]
+        public UserDTO ModifiedBy { get; set; }
+        [BsonElement("DateCreated")]
+        public DateTime DateCreated { get; set; }
+        [BsonElement("DateModified")]
+        public DateTime DateModified { get; set; }
     }
 
     //public class QuestionAnswer<T>

@@ -7,6 +7,7 @@ using Accelerator.API.Shared.Repositories;
 using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using Microsoft.Extensions.Logging;
 
 namespace Accelerator.API.Shared.Services
 {
@@ -17,12 +18,16 @@ namespace Accelerator.API.Shared.Services
         private IQuestionRepository _questionRepository;
         private IClientSessionHandle _clientSessionHandle;
 
+
         static List<QuestionsDTO> questions = new List<QuestionsDTO>();
         #endregion
         public QuestionService(IMapper<QuestionsDTO, Questions> questionMapper,
-            IQuestionRepository questionRepository, IClientSessionHandle clientSessionHandle) =>
-        (_questionMapper, _questionRepository, _clientSessionHandle) = (questionMapper, questionRepository, clientSessionHandle);
-
+            IQuestionRepository questionRepository, IClientSessionHandle clientSessionHandle)
+        {
+            _questionMapper = questionMapper;
+            _questionRepository = questionRepository;
+            _clientSessionHandle = clientSessionHandle;
+        }
         #region addQuestion
         public async Task<QuestionPostResponse> AddQuestion(Questions question)
         {
@@ -31,7 +36,7 @@ namespace Accelerator.API.Shared.Services
             {
                 return new QuestionPostResponse()
                 {
-                    Error = new Error() { Message = $"Incomplete Request, Please provide the correct question payload", Type = "AddQuestion" },
+                    Error = new Error() { Message = $"Incorrect request body, Please provide the correct question payload", Type = "AddQuestion" },
                     Status = "Failed",
                 };
             }
