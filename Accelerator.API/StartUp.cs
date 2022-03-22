@@ -41,15 +41,6 @@ namespace Accelerator.API
             builder.Services.AddScoped<IQuestionService, QuestionService>();
             builder.Services.AddScoped<IMapper<QuestionsDTO, Questions>, QuestionMapper>();
             #endregion
-            ConfigureServices(builder);
-        }
-
-
-        private void ConfigureServices(IFunctionsHostBuilder builder)
-        {
-            _loggerFactory = new LoggerFactory();
-            var logger = _loggerFactory.CreateLogger("Startup");
-            logger.LogInformation("Initializing and configuring services in Startup...");
         }
     }
 }
