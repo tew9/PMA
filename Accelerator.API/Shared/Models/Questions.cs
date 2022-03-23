@@ -26,6 +26,14 @@ namespace Accelerator.API.Shared.Models
         public AnswerDisplayType AnswerType { get; set; }
         [JsonProperty("totalPoints")]
         public int TotalPoint { get; set; }
+        [JsonProperty("CreatedBy")]
+        public UserDTO CreatedBy { get; set; }
+        [JsonProperty("ModifiedBy")]
+        public UserDTO ModifiedBy { get; set; }
+        [JsonProperty("DateCreated")]
+        public DateTime DateCreated { get; set; }
+        [JsonProperty("DateModified")]
+        public DateTime DateModified { get; set; }
     }
 }
 

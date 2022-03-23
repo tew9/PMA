@@ -36,8 +36,8 @@ namespace Accelerator.API
             "ContinousIntegration = 6, Testing = 7, Containerization = 8, Database = 9, ContinousDelivery = 10, "+
             "Security = 11, Monitoring = 12, Logging = 13, TeamCollaboration = 14, ")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(QuestionGetResponse), Description = "The OK response")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "questions/{categoryID}")] HttpRequest req, string categoryID,
+        public async Task<IActionResult> QuestionByCat(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "questions/category/{categoryID}")] HttpRequest req, string categoryID,
             ILogger log)
         {
             log.LogInformation("GetQuestionByID function is triggered...");
@@ -45,6 +45,15 @@ namespace Accelerator.API
             if(string.IsNullOrEmpty(categoryID))
             {
                 log.LogError($"Please provide categoryID parameter...");
+                return new BadRequestResult();
+            }
+            try
+            {
+                Int32.Parse(categoryID);
+            }
+            catch(Exception)
+            {
+                log.LogError($"Please provide correct categoryID as an int representation of the category...");
                 return new BadRequestResult();
             }
 

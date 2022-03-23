@@ -8,36 +8,39 @@ namespace Accelerator.API.Shared.Mappers
 {
     public class QuestionMapper : IMapper<QuestionsDTO, Questions>
     {
-        public QuestionsDTO Map(Questions from)
+        public QuestionsDTO Map(Questions from) => new QuestionsDTO()
         {
-            return new QuestionsDTO()
-            {
                 QID = from.QID,
                 CategoryID = from.CategoryID,
                 Description = from.Description,
                 DisplayType = from.DisplayType,
                 ShortDescription = from.ShortDescription,
                 Category = from.Category,
-                SubCategory = from.SubCategory,
-                AnswerType = from.AnswerType,
-                TotalPoint = from.TotalPoint
-            };
-        }
+                SubCategory = from?.SubCategory,
+                AnswerType = from?.AnswerType,
+                TotalPoint = from.TotalPoint,
+                CreatedBy = from?.CreatedBy,
+                ModifiedBy = from?.ModifiedBy,
+                DateCreated = new DateTime(),
+                DateModified = from.DateModified
 
-        public Questions Map(QuestionsDTO from)
+        };
+
+        public Questions Map(QuestionsDTO from) => new Questions()
         {
-            return new Questions()
-            {
                 QID = from.QID,
                 CategoryID = from.CategoryID,
-                Description = from.Description,
+                Description = from?.Description,
                 DisplayType = from.DisplayType,
-                ShortDescription = from.ShortDescription,
-                Category = from.Category,
-                SubCategory = from.SubCategory,
-                AnswerType = from.AnswerType,
-                TotalPoint = from.TotalPoint
-            };
-        }
+                ShortDescription = from?.ShortDescription,
+                Category = from?.Category,
+                SubCategory = from?.SubCategory,
+                AnswerType = from?.AnswerType,
+                TotalPoint = from.TotalPoint,
+                CreatedBy = from?.CreatedBy,
+                ModifiedBy = from?.ModifiedBy,
+                DateCreated = new DateTime(),
+                DateModified = from.DateModified
+        };
     }
 }
