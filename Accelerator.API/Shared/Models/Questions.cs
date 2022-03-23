@@ -14,7 +14,7 @@ namespace Accelerator.API.Shared.Models
         public CategoryID CategoryID { get; set; } //allows pulling different questions together as long as they belong to the same category
         [JsonProperty("questionDescription")]
         public string Description { get; set; }
-        [JsonProperty("questionDisplayType")]
+        [JsonProperty("AnswersDisplayType")]
         public QuestionDisplayTypes DisplayType { get; set; }
         [JsonProperty("shortDescription")]
         public string ShortDescription { get; set; }

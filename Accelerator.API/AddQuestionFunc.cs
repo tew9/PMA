@@ -33,7 +33,12 @@ namespace Accelerator.API
         //[OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         //[OpenApiParameter(name: "name", In = ParameterLocation.Path, Required = false, Type = typeof(string), Description = "The **Name** parameter")]
         [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(Questions), Description = "The **Question properties** parameters, **questionDisplayType** is number type, use below Mapping DropDown = 0, " +
-            "CheckBoxes = 1, TrueFalse = 2")]
+            "CheckBoxes = 1, TrueFalse = 2\n\n" +
+            "Insert **categoryID** as number, use below Mapping " +
+            "ApplicationSpec = 1, " +
+            "DevelopmentMethodology = 2, HostingEnvironment = 3, SourceControl = 4, BranchingStrategy = 5, " +
+            "ContinousIntegration = 6, Testing = 7, Containerization = 8, Database = 9, ContinousDelivery = 10, " +
+            "Security = 11, Monitoring = 12, Logging = 13, TeamCollaboration = 14, ")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(QuestionPostResponse), Description = "The OK response")]
         public async Task<IActionResult> RunAddQuestion(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "questions")] HttpRequest req,
