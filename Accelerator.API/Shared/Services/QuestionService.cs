@@ -80,7 +80,18 @@ namespace Accelerator.API.Shared.Services
             {
                 return new QuestionPostResponse()
                 {
-                    Error = new Error() { Message = $"Incomplete Request, Please provide the question Id you want to update", Type = "UpdateQuestion" },
+                    Error = new Error() { Message = $"Incorrect Request, Please provide the question Id you want to update", Type = "UpdateQuestion" },
+                    Status = "Failed",
+                };
+            }
+
+            var q = await GetQuestionById(QID);
+
+            if (q.Status.Equals("Failed"))
+            {
+                return new QuestionPostResponse()
+                {
+                    Error = new Error() { Message = $"The Question you're trying to update doesn't exist, please add the question first.", Type = "UpdateQuestion" },
                     Status = "Failed",
                 };
             }
@@ -184,7 +195,7 @@ namespace Accelerator.API.Shared.Services
 
                     return new QuestionGetResponse()
                     {
-                        Status = "success",
+                        Status = "Success",
                         Count = q.Count,
                         Values = q,
                         Info = new Info() { Message = " Retrieved the question successfuly", Source = "GetQuestionByID" }
@@ -194,7 +205,7 @@ namespace Accelerator.API.Shared.Services
                 {
                     return new QuestionGetResponse()
                     {
-                        Status = "success",
+                        Status = "Failed",
                         Info = new Info() { Message = $"There's no question with ID {QID}", Source = "GetQuestionByID" }
                     };
                 }
@@ -229,7 +240,7 @@ namespace Accelerator.API.Shared.Services
 
                     return new QuestionGetResponse()
                     {
-                        Status = "success",
+                        Status = "Success",
                         Count = quests.Count,
                         Values = quests,
                         Info = new Info() { Message = " Retrieved the questions successfuly", Source = "GetQuestionByCategoryID" }
@@ -239,7 +250,7 @@ namespace Accelerator.API.Shared.Services
                 {
                     return new QuestionGetResponse()
                     {
-                        Status = "success",
+                        Status = "Failed",
                         Info = new Info() { Message = "There's no Question in this category", Source = "GetQuestionByCategoryID" }
                     };
                 }
@@ -274,7 +285,7 @@ namespace Accelerator.API.Shared.Services
 
                     return new QuestionGetResponse()
                     {
-                        Status = "success",
+                        Status = "Success",
                         Count = quests.Count,
                         Values = quests,
                         Info = new Info() { Message = "got all the questions successfuly", Source = "GetQuestions" }
@@ -284,7 +295,7 @@ namespace Accelerator.API.Shared.Services
                 {
                     return new QuestionGetResponse()
                     {
-                        Status = "success",
+                        Status = "Failed",
                         Info = new Info() { Message = "There's are no Questions added yet", Source = "GetQuestions" }
                     };
                 }
